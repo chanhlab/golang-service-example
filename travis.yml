@@ -1,0 +1,17 @@
+language: go
+
+go:
+  - 1.14.x
+  - tip
+
+before_install:
+  - go get -t -v ./...
+  - go get github.com/golangci/golangci-lint/cmd/golangci-lint
+
+script:
+  - export PATH=$PATH:$(go env GOPATH)/bin
+  - ./pre-commit
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./... -v
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
