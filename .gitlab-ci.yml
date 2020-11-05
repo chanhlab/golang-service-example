@@ -1,0 +1,52 @@
+variables:
+  GIT_STRATEGY: fetch
+
+before_script:
+  - export ENVIRONMENT=${CI_COMMIT_REF_NAME//\//\_} # Replace "/" with "_"
+  - export RELEASE=$CI_COMMIT_REF_NAME
+  - export PROJECT_NAME=golang-sample
+
+stages:
+  - build
+  - test
+  - release
+
+Build Docker Image:
+  stage: build
+  tags:
+    - shared
+  script:
+    - "docker build -t registry.innogr.am/${PROJECT_NAME}:${ENVIRONMENT} -f Dockerfile.test ."
+  only:
+    - merge_requests
+    - development
+    - staging
+    - master
+
+Unit Test:
+  stage: test
+  tags:
+    - shared
+  script:
+    - "docker run registry.innogr.am/${PROJECT_NAME}:${ENVIRONMENT}"
+  only:
+    - merge_requests
+    - development
+    - staging
+    - master
+
+Push Docker Image:
+  stage: release
+  tags:
+    - shared
+  script:
+    - "docker login -u ${az_registry_user} -p ${az_registry_password} registry.innogr.am"
+    - "docker build -t registry.innogr.am/${PROJECT_NAME}:${RELEASE} -f Dockerfile ."
+    - "docker push registry.innogr.am/${PROJECT_NAME}:${RELEASE}"
+  when: on_success
+  only:
+    - development
+    - staging
+    - master
+  cache:
+    untracked: true

@@ -1,0 +1,56 @@
+// cSpell Settings
+{
+  // Version of the setting file.  Always 0.1
+  "version": "0.1",
+  // language - current active spelling language
+  "language": "en-US",
+  // words - list of words to be always considered correct
+  "words": [
+    "ahhohsh",
+    "downlevel",
+    "ecfg",
+    "ESNEXT",
+    "godotenv",
+    "gorm",
+    "gormzap",
+    "GRPC",
+    "hashicorp",
+    "innogr",
+    "Interop",
+    "jinzhu",
+    "joho",
+    "Kubernetes",
+    "languageclient",
+    "lerna",
+    "nospace",
+    "proto",
+    "protobuf",
+    "ptypes",
+    "quotemark",
+    "sourcemap",
+    "streetsidesoftware",
+    "stretchr",
+    "submodule",
+    "tslib",
+    "typechecking",
+    "untracked",
+    "uuid",
+    "wantedly",
+    "webview"
+  ],
+  // flagWords - list of words to be always considered incorrect
+  // This is useful for offensive words and common spelling errors.
+  // For example "hte" should be "the"
+  "flagWords": [
+    "hte"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    "coverage",
+    "temp"
+  ],
+  "languageSettings": [{
+    "languageId": "*",
+    "dictionaries": []
+  }]
+}

@@ -1,0 +1,52 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  IMAGE_NAME: golang-example
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Run Linter
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.14.x
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Install golangci-lint
+        run: |
+          go get github.com/golangci/golangci-lint/cmd/golangci-lint
+      - name: Run linters
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          ./pre-commit
+
+  unit-test:
+    runs-on: ubuntu-latest
+    name: Run Unit Tests
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.14.x
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Run tests
+        run: go test ./... -v
+
+  test-dockerfile:
+    runs-on: ubuntu-latest
+    name: Test Dockerfile
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Image
+        run: docker build -t $IMAGE_NAME -f Dockerfile .
