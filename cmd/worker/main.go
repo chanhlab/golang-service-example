@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"strconv"
 
-	JobWorkers "github.com/digitalocean/go-workers2"
 	"github.com/chanhteam/golang-service-example/internal/workers"
 	"github.com/chanhteam/golang-service-example/pkg"
+
+	JobWorkers "github.com/digitalocean/go-workers2"
 )
 
 // main ...

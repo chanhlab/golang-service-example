@@ -1,4 +1,5 @@
-![Tests](https://github.com/duongnv129/golang-sample/workflows/Tests/badge.svg?branch=master)
+[![Build Status](https://travis-ci.org/chanhteam/golang-service-example.svg?branch=master)](https://travis-ci.org/chanhteam/golang-service-example)
+![Tests](https://github.com/chanhteam/golang-service-example/workflows/Tests/badge.svg)
 
 ## Get Started
 
