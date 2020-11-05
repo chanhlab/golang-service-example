@@ -41,7 +41,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
       - name: Run tests
-        run: go test ./... -v
+        run: go test -covermode=atomic -coverprofile=coverage.txt ./... -v
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: 1beefeca-357c-4be9-a654-06bf196667cf
+          file: ./coverage.txt
+          flags: unittests
+          name: codecov-umbrella
 
   test-dockerfile:
     runs-on: ubuntu-latest
