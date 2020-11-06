@@ -32,7 +32,7 @@ build:
 .PHONY: build_docker
 build_docker:
 	@echo "## Build Docker Image"
-	docker build -t registry.innogr.am/golang-sample:latest -f Dockerfile .
+	docker build -t golang-service-sample:latest -f Dockerfile .
 
 .PHONY: test
 test:
