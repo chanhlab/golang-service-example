@@ -9,7 +9,7 @@ on:
       - master
 
 env:
-  IMAGE_NAME: golang-example
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
   lint:
@@ -45,7 +45,7 @@ jobs:
       - name: Upload coverage report
         uses: codecov/codecov-action@v1.0.2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${ CODECOV_TOKEN }
           file: ./coverage.out
           flags: unittests
           name: codecov-umbrella
@@ -56,4 +56,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Image
-        run: docker build -t $IMAGE_NAME -f Dockerfile .
+        run: make build_docker
