@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/chanhteam/go-utils/timestamp"
 	"github.com/chanhteam/golang-service-example/internal/models"
-	"github.com/chanhteam/golang-service-example/pkg"
+
 	pb "github.com/chanhteam/golang-service-example/protobuf/v1/credential"
 )
 
@@ -132,7 +133,7 @@ func (s *CredentialService) Delete(ctx context.Context, request *pb.DeleteCreden
 	if err != nil {
 		return nil, fmt.Errorf("Can not Remove Credential with ID %s, %+v", id, err)
 	}
-	return &pb.DeleteCredentialResponse{DeletedAt: pkg.TimestampProtoNow()}, nil
+	return &pb.DeleteCredentialResponse{DeletedAt: timestamp.TimestampProtoNow()}, nil
 }
 
 // CredentialToProto converts Credential to Proto Credential
@@ -142,7 +143,7 @@ func (s *CredentialService) CredentialToProto(credential *models.Credential) *pb
 		Key:       credential.Key,
 		Value:     credential.Value,
 		Status:    credential.Status.String(),
-		CreatedAt: pkg.TimeToTimestampProto(credential.CreatedAt),
-		UpdatedAt: pkg.TimeToTimestampProto(credential.UpdatedAt),
+		CreatedAt: timestamp.TimeToTimestampProto(credential.CreatedAt),
+		UpdatedAt: timestamp.TimeToTimestampProto(credential.UpdatedAt),
 	}
 }
