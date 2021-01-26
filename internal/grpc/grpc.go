@@ -7,11 +7,13 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/chanhteam/go-utils/database/mysql"
+	"github.com/chanhteam/go-utils/grpc/middleware"
+	"github.com/chanhteam/go-utils/logger"
+	"github.com/chanhteam/golang-service-example/config"
 	"github.com/chanhteam/golang-service-example/internal/models"
 	"github.com/chanhteam/golang-service-example/internal/services"
-	"github.com/chanhteam/golang-service-example/pkg/db/mysql"
-	"github.com/chanhteam/golang-service-example/pkg/grpc/middleware"
-	"github.com/chanhteam/golang-service-example/pkg/logger"
+
 	credentail_v1_pb "github.com/chanhteam/golang-service-example/protobuf/v1/credential"
 
 	"google.golang.org/grpc"
@@ -19,9 +21,9 @@ import (
 )
 
 // RunGrpcServer ...
-func RunGrpcServer(ctx context.Context, port int) error {
-	logger.Log.Sugar().Info(fmt.Sprintf("gRPC Port: %d", port))
-	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+func RunGrpcServer(ctx context.Context, appConfig *config.Config) error {
+	logger.Log.Sugar().Info(fmt.Sprintf("gRPC Port: %d", appConfig.Server.GRPCPort))
+	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", appConfig.Server.GRPCPort))
 	if err != nil {
 		logger.Log.Sugar().Error(err)
 		return err
@@ -36,7 +38,13 @@ func RunGrpcServer(ctx context.Context, port int) error {
 	// register server
 	server := grpc.NewServer(options...)
 
-	db := mysql.GetConnection()
+	db := mysql.GetConnection(
+		appConfig.MySQL.Host,
+		appConfig.MySQL.DBName,
+		appConfig.MySQL.Username,
+		appConfig.MySQL.Password,
+		appConfig.MySQL.MaxIDLEConnection,
+		appConfig.MySQL.MaxOpenConnection)
 	credentialRepository := models.NewCredentialRepository(db)
 	credentialService := services.NewCredentialService(credentialRepository)
 
