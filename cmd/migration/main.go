@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/chanhteam/go-utils/database/mysql"
-	"github.com/chanhteam/go-utils/logger"
-	"github.com/chanhteam/golang-service-example/config"
-	"github.com/chanhteam/golang-service-example/internal/models"
+	"github.com/chanhlab/go-utils/database/mysql"
+	"github.com/chanhlab/go-utils/logger"
+	"github.com/chanhlab/golang-service-example/config"
+	"github.com/chanhlab/golang-service-example/internal/models"
 )
 
 // main ...

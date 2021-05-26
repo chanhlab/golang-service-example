@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/chanhteam/golang-service-example/config"
-	"github.com/chanhteam/golang-service-example/internal/workers"
+	"github.com/chanhlab/golang-service-example/config"
+	"github.com/chanhlab/golang-service-example/internal/workers"
 
 	JobWorkers "github.com/digitalocean/go-workers2"
 )

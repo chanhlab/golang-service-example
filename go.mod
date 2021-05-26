@@ -1,10 +1,10 @@
-module github.com/chanhteam/golang-service-example
+module github.com/chanhlab/golang-service-example
 
 go 1.15
 
 require (
 	github.com/bxcodec/faker/v3 v3.3.1
-	github.com/chanhteam/go-utils v1.0.1
+	github.com/chanhlab/go-utils v1.0.1
 	github.com/digitalocean/go-workers2 v0.9.1
 	github.com/golang/protobuf v1.4.3
 	github.com/google/uuid v1.1.2

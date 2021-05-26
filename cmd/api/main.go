@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/chanhteam/go-utils/logger"
-	"github.com/chanhteam/golang-service-example/config"
-	"github.com/chanhteam/golang-service-example/internal/grpc"
-	"github.com/chanhteam/golang-service-example/internal/rest"
+	"github.com/chanhlab/go-utils/logger"
+	"github.com/chanhlab/golang-service-example/config"
+	"github.com/chanhlab/golang-service-example/internal/grpc"
+	"github.com/chanhlab/golang-service-example/internal/rest"
 )
 
 // Server ...

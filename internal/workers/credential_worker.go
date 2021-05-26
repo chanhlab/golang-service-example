@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	credentail_pb "github.com/chanhteam/golang-service-example/protobuf/v1/credential"
+	credentail_pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
 	JobWorkers "github.com/digitalocean/go-workers2"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"

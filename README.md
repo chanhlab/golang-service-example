@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/chanhteam/golang-service-example.svg?branch=master)](https://travis-ci.org/chanhteam/golang-service-example)
-![Tests](https://github.com/chanhteam/golang-service-example/workflows/Tests/badge.svg)
-[![codecov](https://codecov.io/gh/chanhteam/golang-service-example/branch/master/graph/badge.svg?token=S02QXOCQJ9)](https://codecov.io/gh/chanhteam/golang-service-example)
+[![Build Status](https://travis-ci.org/chanhlab/golang-service-example.svg?branch=master)](https://travis-ci.org/chanhlab/golang-service-example)
+![Tests](https://github.com/chanhlab/golang-service-example/workflows/Tests/badge.svg)
+[![codecov](https://codecov.io/gh/chanhlab/golang-service-example/branch/master/graph/badge.svg?token=S02QXOCQJ9)](https://codecov.io/gh/chanhlab/golang-service-example)
 
 ## Get Started
 

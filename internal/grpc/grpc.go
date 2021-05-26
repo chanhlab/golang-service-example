@@ -7,14 +7,14 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/chanhteam/go-utils/database/mysql"
-	"github.com/chanhteam/go-utils/grpc/middleware"
-	"github.com/chanhteam/go-utils/logger"
-	"github.com/chanhteam/golang-service-example/config"
-	"github.com/chanhteam/golang-service-example/internal/models"
-	"github.com/chanhteam/golang-service-example/internal/services"
+	"github.com/chanhlab/go-utils/database/mysql"
+	"github.com/chanhlab/go-utils/grpc/middleware"
+	"github.com/chanhlab/go-utils/logger"
+	"github.com/chanhlab/golang-service-example/config"
+	"github.com/chanhlab/golang-service-example/internal/models"
+	"github.com/chanhlab/golang-service-example/internal/services"
 
-	credentail_v1_pb "github.com/chanhteam/golang-service-example/protobuf/v1/credential"
+	credentail_v1_pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"

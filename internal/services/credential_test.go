@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/chanhteam/golang-service-example/internal/models/mocks"
-	pb "github.com/chanhteam/golang-service-example/protobuf/v1/credential"
+	"github.com/chanhlab/golang-service-example/internal/models/mocks"
+	pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"

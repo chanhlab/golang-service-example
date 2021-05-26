@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/chanhteam/golang-service-example/internal/models"
+	"github.com/chanhlab/golang-service-example/internal/models"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"

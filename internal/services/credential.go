@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/chanhteam/go-utils/timestamp"
-	"github.com/chanhteam/golang-service-example/internal/models"
+	"github.com/chanhlab/go-utils/timestamp"
+	"github.com/chanhlab/golang-service-example/internal/models"
 
-	pb "github.com/chanhteam/golang-service-example/protobuf/v1/credential"
+	pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
 )
 
 // CredentialService ...

@@ -8,9 +8,9 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/chanhteam/go-utils/logger"
-	"github.com/chanhteam/go-utils/rest/middleware"
-	credentail_pb "github.com/chanhteam/golang-service-example/protobuf/v1/credential"
+	"github.com/chanhlab/go-utils/logger"
+	"github.com/chanhlab/go-utils/rest/middleware"
+	credentail_pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
 
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
