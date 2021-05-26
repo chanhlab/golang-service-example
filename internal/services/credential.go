@@ -24,8 +24,8 @@ func NewCredentialService(credentialRepository models.CredentialRepository) *Cre
 
 // List ...
 func (s *CredentialService) List(ctx context.Context, request *pb.ListCredentialRequest) (*pb.ListCredentialResponse, error) {
-	offset := request.GetOffset()
-	limit := request.GetLimit()
+	offset := int(request.GetOffset())
+	limit := int(request.GetLimit())
 	if limit == 0 {
 		limit = 10
 	}
@@ -133,7 +133,7 @@ func (s *CredentialService) Delete(ctx context.Context, request *pb.DeleteCreden
 	if err != nil {
 		return nil, fmt.Errorf("Can not Remove Credential with ID %s, %+v", id, err)
 	}
-	return &pb.DeleteCredentialResponse{DeletedAt: timestamp.TimestampProtoNow()}, nil
+	return &pb.DeleteCredentialResponse{DeletedAt: timestamp.ProtoTimestampNow()}, nil
 }
 
 // CredentialToProto converts Credential to Proto Credential
@@ -143,7 +143,7 @@ func (s *CredentialService) CredentialToProto(credential *models.Credential) *pb
 		Key:       credential.Key,
 		Value:     credential.Value,
 		Status:    credential.Status.String(),
-		CreatedAt: timestamp.TimeToTimestampProto(credential.CreatedAt),
-		UpdatedAt: timestamp.TimeToTimestampProto(credential.UpdatedAt),
+		CreatedAt: timestamp.TimeToProtoTimestamp(credential.CreatedAt),
+		UpdatedAt: timestamp.TimeToProtoTimestamp(credential.UpdatedAt),
 	}
 }

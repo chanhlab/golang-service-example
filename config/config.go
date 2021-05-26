@@ -6,6 +6,7 @@ import "github.com/ilyakaznacheev/cleanenv"
 type Config struct {
 	MySQL struct {
 		Host              string `env:"MYSQL_HOST" env-description:"MySQL host"`
+		Port              int    `env:"MYSQL_PORT" env-description:"MySQL port" env-default:"3306"`
 		DBName            string `env:"MYSQL_DATABASE" env-description:"MySQL Database name"`
 		Username          string `env:"MYSQL_USERNAME" env-description:"MySQL user name"`
 		Password          string `env:"MYSQL_PASSWORD" env-description:"MySQL user password"`

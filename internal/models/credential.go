@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // CredentialStatus defines the credential status
@@ -43,7 +43,7 @@ type Credential struct {
 
 // CredentialRepository interface
 type CredentialRepository interface {
-	GetCredentials(offset int64, limit int64) ([]*Credential, error)
+	GetCredentials(offset int, limit int) ([]*Credential, error)
 	GetCredential(id string) (*Credential, error)
 	Create(*Credential) error
 	Update(*Credential) error
@@ -74,7 +74,7 @@ func (m *Credential) BeforeCreate() error {
 }
 
 // GetCredentials returns a list of credentials
-func (db *CredentialDB) GetCredentials(offset int64, limit int64) ([]*Credential, error) {
+func (db *CredentialDB) GetCredentials(offset int, limit int) ([]*Credential, error) {
 	credentials := []*Credential{}
 	err := db.DB.Offset(offset).Limit(limit).
 		Find(&credentials).Error

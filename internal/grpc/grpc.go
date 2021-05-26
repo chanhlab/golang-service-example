@@ -40,6 +40,7 @@ func RunGrpcServer(ctx context.Context, appConfig *config.Config) error {
 
 	db := mysql.GetConnection(
 		appConfig.MySQL.Host,
+		config.AppConfig.MySQL.Port,
 		appConfig.MySQL.DBName,
 		appConfig.MySQL.Username,
 		appConfig.MySQL.Password,

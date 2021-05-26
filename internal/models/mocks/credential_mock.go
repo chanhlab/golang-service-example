@@ -12,7 +12,7 @@ import (
 
 // CredentialRepository interface
 type CredentialRepository interface {
-	GetCredentials(int64, int64) ([]*models.Credential, error)
+	GetCredentials(int, int) ([]*models.Credential, error)
 	GetCredential(string) (*models.Credential, error)
 	Create(*models.Credential) error
 	Update(*models.Credential) error
@@ -31,7 +31,7 @@ func NewCredentialRepository() CredentialRepository {
 }
 
 // GetCredentials returns a list of credentials
-func (db *CredentialDBMock) GetCredentials(offset int64, limit int64) ([]*models.Credential, error) {
+func (db *CredentialDBMock) GetCredentials(offset int, limit int) ([]*models.Credential, error) {
 	var err error
 
 	if offset > 100 {

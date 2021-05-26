@@ -15,7 +15,7 @@ func main() {
 	config.NewConfig()
 	config := config.AppConfig
 	logger.Init(config.Logger.LogLevel, config.Logger.LogTimeFormat)
-	db := mysql.GetConnection(config.MySQL.Host, config.MySQL.DBName, config.MySQL.Username, config.MySQL.Password, config.MySQL.MaxIDLEConnection, config.MySQL.MaxOpenConnection)
+	db := mysql.GetConnection(config.MySQL.Host, config.MySQL.Port, config.MySQL.DBName, config.MySQL.Username, config.MySQL.Password, config.MySQL.MaxIDLEConnection, config.MySQL.MaxOpenConnection)
 	// Create Credential table
 	db.AutoMigrate(&models.Credential{})
 }

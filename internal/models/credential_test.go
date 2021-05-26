@@ -7,10 +7,11 @@ import (
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type CredentialTestSuite struct {
@@ -26,9 +27,12 @@ func (c *CredentialTestSuite) SetupSuite() {
 	var err error
 
 	db, c.mock, _ = sqlmock.New()
-	c.DB, err = gorm.Open("mysql", db)
+	c.DB, err = gorm.Open(mysql.New(mysql.Config{
+		Conn:                      db,
+		SkipInitializeWithVersion: true,
+	}), &gorm.Config{})
+
 	require.NoError(c.T(), err)
-	c.DB.LogMode(true)
 	c.credentialRepository = NewCredentialRepository(c.DB)
 
 	c.credential = &Credential{
@@ -57,8 +61,8 @@ func (c *CredentialTestSuite) TestBeforeCreate() {
 }
 
 func (c *CredentialTestSuite) TestGetCredentials() {
-	offset := int64(0)
-	limit := int64(10)
+	offset := 0
+	limit := 10
 	credential := c.credential
 
 	mockCredentials := sqlmock.NewRows([]string{"id", "key", "value", "status", "created_at", "updated_at"}).
