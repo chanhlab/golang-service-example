@@ -10,7 +10,7 @@ env:
 .PHONY: lint
 lint:
 	@echo "## Run GolangCI Lint"
-	golangci-lint -E bodyclose,misspell,gocyclo,dupl,gofmt,golint,unconvert,goimports,depguard,gocritic,funlen,interfacer run
+	golangci-lint run
 
 .PHONY: generate
 generate:
