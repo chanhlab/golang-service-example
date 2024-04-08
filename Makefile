@@ -10,7 +10,7 @@ env:
 .PHONY: lint
 lint:
 	@echo "## Run GolangCI Lint"
-	golangci-lint run
+	golangci-lint run ./...
 
 .PHONY: generate
 generate:
