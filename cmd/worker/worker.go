@@ -1,16 +1,15 @@
-package main
+package worker
 
 import (
 	"fmt"
 
 	"github.com/chanhlab/golang-service-example/config"
 	"github.com/chanhlab/golang-service-example/internal/workers"
-
 	JobWorkers "github.com/digitalocean/go-workers2"
 )
 
 // main ...
-func main() {
+func RunWorker() {
 	config.NewConfig()
 	config := config.AppConfig
 

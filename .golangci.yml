@@ -1,0 +1,45 @@
+run:
+  timeout: 3m
+
+linters-settings:
+  gofmt:
+    simplify: true
+  goconst:
+    min-len: 3 # minimum length of string constant
+    min-occurrences: 6 # minimum number of occurrences
+  funlen:
+    lines: 60
+    statements: 40
+
+linters:
+  enable-all: false
+  disable-all: true
+  fast: false
+  enable:
+    - gosimple
+    - deadcode
+    - typecheck
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - structcheck
+    - varcheck
+    - golint
+    - dupl
+    - gocyclo
+    - gofmt
+    - misspell
+    - gocritic
+
+issues:
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gomnd
+    - path: config/config.go
+      linters:
+        - lll
+  # include:
+  # - EXC0002

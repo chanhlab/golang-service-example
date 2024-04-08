@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	credentail_pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	JobWorkers "github.com/digitalocean/go-workers2"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
@@ -46,11 +46,11 @@ func (worker *CredentialWorker) Execute(message *JobWorkers.Msg) error {
 		JobWorkers.Logger.Fatalf("Did not connect: %v", err)
 	}
 	defer connection.Close()
-	client := credentail_pb.NewCredentialServiceClient(connection)
+	client := credentialv1.NewCredentialServiceClient(connection)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	credential, err := client.Create(ctx, &credentail_pb.CreateCredentialRequest{
+	credential, err := client.Create(ctx, &credentialv1.CreateRequest{
 		Key:   uuid.New().String(),
 		Value: uuid.New().String(),
 	})

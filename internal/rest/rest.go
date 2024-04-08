@@ -10,10 +10,9 @@ import (
 
 	"github.com/chanhlab/go-utils/logger"
 	"github.com/chanhlab/go-utils/rest/middleware"
-	credentail_pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
-
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/opentracing/opentracing-go"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -24,7 +23,7 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	mux := runtime.NewServeMux(
-		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{OrigName: true, EmitDefaults: true}),
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{}),
 		runtime.WithIncomingHeaderMatcher(CustomHeaderMatcher),
 	)
 
@@ -39,7 +38,7 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 		),
 	}
 
-	err := credentail_pb.RegisterCredentialServiceHandlerFromEndpoint(ctx, mux, fmt.Sprintf(":%d", grpcPort), opts)
+	err := credentialv1.RegisterCredentialServiceHandlerFromEndpoint(ctx, mux, fmt.Sprintf(":%d", grpcPort), opts)
 	if err != nil {
 		logger.Log.Fatal("failed to start HTTP gateway", zap.String("reason", err.Error()))
 	}

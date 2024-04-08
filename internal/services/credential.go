@@ -5,9 +5,8 @@ import (
 	"fmt"
 
 	"github.com/chanhlab/go-utils/timestamp"
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	"github.com/chanhlab/golang-service-example/internal/models"
-
-	pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
 )
 
 // CredentialService ...
@@ -23,7 +22,7 @@ func NewCredentialService(credentialRepository models.CredentialRepository) *Cre
 }
 
 // List ...
-func (s *CredentialService) List(ctx context.Context, request *pb.ListCredentialRequest) (*pb.ListCredentialResponse, error) {
+func (s *CredentialService) List(ctx context.Context, request *credentialv1.ListRequest) (*credentialv1.ListResponse, error) {
 	offset := int(request.GetOffset())
 	limit := int(request.GetLimit())
 	if limit == 0 {
@@ -37,26 +36,26 @@ func (s *CredentialService) List(ctx context.Context, request *pb.ListCredential
 	if err != nil {
 		return nil, fmt.Errorf("Can not get Credentials: %+v", err)
 	}
-	pbCredentials := []*pb.Credential{}
+	pbCredentials := []*credentialv1.Credential{}
 	for _, credential := range credentials {
 		pbCredentials = append(pbCredentials, s.CredentialToProto(credential))
 	}
-	return &pb.ListCredentialResponse{Credentials: pbCredentials}, nil
+	return &credentialv1.ListResponse{Credentials: pbCredentials}, nil
 }
 
 // Get ...
-func (s *CredentialService) Get(ctx context.Context, request *pb.GetCredentialRequest) (*pb.GetCredentialResponse, error) {
+func (s *CredentialService) Get(ctx context.Context, request *credentialv1.GetRequest) (*credentialv1.GetResponse, error) {
 	id := request.GetId()
 	var credential *models.Credential
 	credential, err := s.CredentialRepository.GetCredential(id)
 	if err != nil {
 		return nil, fmt.Errorf("Credential not found with ID %s, Error: %+v", id, err)
 	}
-	return &pb.GetCredentialResponse{Credential: s.CredentialToProto(credential)}, nil
+	return &credentialv1.GetResponse{Credential: s.CredentialToProto(credential)}, nil
 }
 
 // Create ...
-func (s *CredentialService) Create(ctx context.Context, request *pb.CreateCredentialRequest) (*pb.CreateCredentialResponse, error) {
+func (s *CredentialService) Create(ctx context.Context, request *credentialv1.CreateRequest) (*credentialv1.CreateResponse, error) {
 	key := request.GetKey()
 	value := request.GetValue()
 
@@ -66,11 +65,11 @@ func (s *CredentialService) Create(ctx context.Context, request *pb.CreateCreden
 		return nil, fmt.Errorf("Can not create Credential: %+v", err)
 	}
 	credential, _ = s.CredentialRepository.GetCredential(credential.ID)
-	return &pb.CreateCredentialResponse{Credential: s.CredentialToProto(credential)}, nil
+	return &credentialv1.CreateResponse{Credential: s.CredentialToProto(credential)}, nil
 }
 
 // Update ...
-func (s *CredentialService) Update(ctx context.Context, request *pb.UpdateCredentialRequest) (*pb.UpdateCredentialResponse, error) {
+func (s *CredentialService) Update(ctx context.Context, request *credentialv1.UpdateRequest) (*credentialv1.UpdateResponse, error) {
 	id := request.GetId()
 	value := request.GetValue()
 
@@ -86,11 +85,11 @@ func (s *CredentialService) Update(ctx context.Context, request *pb.UpdateCreden
 	}
 
 	credential, _ = s.CredentialRepository.GetCredential(credential.ID)
-	return &pb.UpdateCredentialResponse{Credential: s.CredentialToProto(credential)}, nil
+	return &credentialv1.UpdateResponse{Credential: s.CredentialToProto(credential)}, nil
 }
 
 // Activate updates status of credential to active
-func (s *CredentialService) Activate(ctx context.Context, request *pb.GetCredentialRequest) (*pb.UpdateCredentialResponse, error) {
+func (s *CredentialService) Activate(ctx context.Context, request *credentialv1.ActivateRequest) (*credentialv1.ActivateResponse, error) {
 	id := request.GetId()
 
 	credential, err := s.CredentialRepository.GetCredential(id)
@@ -104,11 +103,11 @@ func (s *CredentialService) Activate(ctx context.Context, request *pb.GetCredent
 		return nil, fmt.Errorf("Can not Activate Credential with ID %s, %+v", id, err)
 	}
 
-	return &pb.UpdateCredentialResponse{Credential: s.CredentialToProto(credential)}, nil
+	return &credentialv1.ActivateResponse{Credential: s.CredentialToProto(credential)}, nil
 }
 
 // Deactivate updates status of credential to Inactive
-func (s *CredentialService) Deactivate(ctx context.Context, request *pb.GetCredentialRequest) (*pb.UpdateCredentialResponse, error) {
+func (s *CredentialService) Deactivate(ctx context.Context, request *credentialv1.DeactivateRequest) (*credentialv1.DeactivateResponse, error) {
 	id := request.GetId()
 
 	credential, err := s.CredentialRepository.GetCredential(id)
@@ -122,23 +121,23 @@ func (s *CredentialService) Deactivate(ctx context.Context, request *pb.GetCrede
 		return nil, fmt.Errorf("Can not Deactivate Credential with ID %s, %+v", id, err)
 	}
 
-	return &pb.UpdateCredentialResponse{Credential: s.CredentialToProto(credential)}, nil
+	return &credentialv1.DeactivateResponse{Credential: s.CredentialToProto(credential)}, nil
 }
 
 // Delete ...
-func (s *CredentialService) Delete(ctx context.Context, request *pb.DeleteCredentialRequest) (*pb.DeleteCredentialResponse, error) {
+func (s *CredentialService) Delete(ctx context.Context, request *credentialv1.DeleteRequest) (*credentialv1.DeleteResponse, error) {
 	id := request.GetId()
 	credential := &models.Credential{ID: id}
 	err := s.CredentialRepository.Delete(credential)
 	if err != nil {
 		return nil, fmt.Errorf("Can not Remove Credential with ID %s, %+v", id, err)
 	}
-	return &pb.DeleteCredentialResponse{DeletedAt: timestamp.ProtoTimestampNow()}, nil
+	return &credentialv1.DeleteResponse{DeletedAt: timestamp.ProtoTimestampNow()}, nil
 }
 
 // CredentialToProto converts Credential to Proto Credential
-func (s *CredentialService) CredentialToProto(credential *models.Credential) *pb.Credential {
-	return &pb.Credential{
+func (s *CredentialService) CredentialToProto(credential *models.Credential) *credentialv1.Credential {
+	return &credentialv1.Credential{
 		Id:        credential.ID,
 		Key:       credential.Key,
 		Value:     credential.Value,

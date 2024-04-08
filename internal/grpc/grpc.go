@@ -11,11 +11,9 @@ import (
 	"github.com/chanhlab/go-utils/grpc/middleware"
 	"github.com/chanhlab/go-utils/logger"
 	"github.com/chanhlab/golang-service-example/config"
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	"github.com/chanhlab/golang-service-example/internal/models"
 	"github.com/chanhlab/golang-service-example/internal/services"
-
-	credentail_v1_pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -49,7 +47,7 @@ func RunGrpcServer(ctx context.Context, appConfig *config.Config) error {
 	credentialRepository := models.NewCredentialRepository(db)
 	credentialService := services.NewCredentialService(credentialRepository)
 
-	credentail_v1_pb.RegisterCredentialServiceServer(server, credentialService)
+	credentialv1.RegisterCredentialServiceServer(server, credentialService)
 
 	// graceful shutdown
 	c := make(chan os.Signal, 1)

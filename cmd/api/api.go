@@ -1,9 +1,7 @@
-package main
+package api
 
 import (
 	"context"
-	"fmt"
-	"os"
 
 	"github.com/chanhlab/go-utils/logger"
 	"github.com/chanhlab/golang-service-example/config"
@@ -17,9 +15,7 @@ type Server struct {
 }
 
 // RunServer ... runs gRPC server and HTTP gateway
-func (srv *Server) RunServer() error {
-	ctx := context.Background()
-
+func (srv *Server) RunServer(ctx context.Context) error {
 	// initialize logger
 	logger.Init(srv.Config.Logger.LogLevel, srv.Config.Logger.LogTimeFormat)
 
@@ -31,13 +27,10 @@ func (srv *Server) RunServer() error {
 	return grpc.RunGrpcServer(ctx, srv.Config)
 }
 
-func main() {
+func RunAPI(ctx context.Context) error {
 	config.NewConfig()
 	server := &Server{
 		Config: config.AppConfig,
 	}
-	if err := server.RunServer(); err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(1)
-	}
+	return server.RunServer(ctx)
 }
