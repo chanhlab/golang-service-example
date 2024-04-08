@@ -12,10 +12,8 @@ linters:
     - errorlint
     - exportloopref
     - funlen
-    - gocheckcompilerdirectives
     - gochecknoinits
     - goconst
-    - gocritic
     - gocyclo
     - godox
     - gofmt
@@ -34,7 +32,6 @@ linters:
     - revive
     - staticcheck
     - stylecheck
-    - testifylint
     - unconvert
     - unparam
     - unused
@@ -47,33 +44,6 @@ issues:
         - dupl
         - gomnd
         - lll
-  exclude:
-    - should have a package comment
-    - should have comment
-    - should be of the form
-    - should not use dot imports
-    - which can be annoying to use
-    # Binds to all network interfaces
-    - G102
-    # Use of unsafe calls should be audited
-    - G103
-    # Errors unhandled
-    - G104
-    # file/folder Permission
-    - G301
-    - G302
-    # Potential file inclusion via variable
-    - G304
-    # Deferring unsafe method like *os.File Close
-    - G307
-    # TLS MinVersion too low
-    - G402
-    # Use of weak random number generator math/rand
-    - G404
-    # Unused parameters
-    - SA1019
-    # defer return errors
-    - SA5001
 
   # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
   max-issues-per-linter: 0
