@@ -13,18 +13,10 @@ RUN go mod download
 
 COPY . .
 
-# Build API
-RUN cd cmd/api && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -a -installsuffix cgo -o /api
-
-# Build Migration
-RUN cd cmd/migration && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -a -installsuffix cgo -o /migration
-
-# Build Worker
-RUN cd cmd/worker && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -a -installsuffix cgo -o /worker
+# Build
+RUN cd cmd/ && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -a -installsuffix cgo -o /server
 
 FROM alpine as release
-COPY --from=builder /api /api
-COPY --from=builder /migration /migration
-COPY --from=builder /worker /worker
+COPY --from=builder /server /server
 
-CMD ["/api","/migration","/worker"]
+CMD ["/server api"]
