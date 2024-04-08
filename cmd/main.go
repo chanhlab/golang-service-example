@@ -6,6 +6,7 @@ import (
 
 	"github.com/chanhlab/golang-service-example/cmd/api"
 	"github.com/chanhlab/golang-service-example/cmd/migration"
+	"github.com/chanhlab/golang-service-example/cmd/worker"
 	"github.com/urfave/cli/v2"
 )
 
@@ -25,6 +26,12 @@ func main() {
 				Name: "migration",
 				Action: func(ctx *cli.Context) error {
 					return migration.RunMigration(ctx.Context)
+				},
+			},
+			{
+				Name: "worker",
+				Action: func(ctx *cli.Context) error {
+					return worker.RunWorker()
 				},
 			},
 		},

@@ -9,7 +9,7 @@ import (
 )
 
 // main ...
-func RunWorker() {
+func RunWorker() error {
 	config.NewConfig()
 	config := config.AppConfig
 
@@ -46,4 +46,5 @@ func RunWorker() {
 
 	// Blocks until process is told to exit via unix signal
 	manager.Run()
+	return nil
 }
