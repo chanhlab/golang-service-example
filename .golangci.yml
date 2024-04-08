@@ -1,43 +1,52 @@
 run:
   go: "1.22"
-  skip-dirs:
-    - build
-    - configs
-    - deployments
-    - docs
-    - scripts
-    - internal/core
-    - cmake_build
 
 linters:
   disable-all: true
   enable:
+    - bodyclose
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - errorlint
+    - exportloopref
+    - funlen
+    - gocheckcompilerdirectives
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - gocyclo
+    - godox
+    - gofmt
+    - goimports
+    - gomnd
+    - goprintffuncname
+    - gosec
     - gosimple
     - govet
     - ineffassign
-    - staticcheck
-    - decorder
-    - depguard
-    - gofmt
-    - goimports
-    - gosec
-    - revive
-    - unconvert
+    - lll
     - misspell
-    - typecheck
-    - durationcheck
-    - forbidigo
-    - gci
+    - nakedret
+    - noctx
+    - nolintlint
+    - revive
+    - staticcheck
+    - stylecheck
+    - testifylint
+    - unconvert
+    - unparam
+    - unused
     - whitespace
-    - gofumpt
-    # - gocritic
 
 issues:
-  exclude-use-default: false
   exclude-rules:
-    - path: .+_test\.go
+    - path: (.+)_test\.go
       linters:
-        - forbidigo
+        - dupl
+        - gomnd
+        - lll
   exclude:
     - should have a package comment
     - should have comment
@@ -70,7 +79,3 @@ issues:
   max-issues-per-linter: 0
   # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
   max-same-issues: 0
-
-service:
-  # use the fixed version to not introduce new linters unexpectedly
-  golangci-lint-version: 1.55.2
