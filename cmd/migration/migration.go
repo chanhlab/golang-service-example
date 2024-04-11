@@ -11,7 +11,7 @@ import (
 )
 
 // main ...
-func RunMigration(ctx context.Context) error {
+func RunMigration(_ context.Context) error {
 	fmt.Printf("Migrate \n")
 	config.NewConfig()
 	config := config.AppConfig

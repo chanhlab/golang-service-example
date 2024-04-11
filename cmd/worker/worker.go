@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/chanhlab/golang-service-example/config"
@@ -9,7 +10,7 @@ import (
 )
 
 // main ...
-func RunWorker() error {
+func RunWorker(_ context.Context) error {
 	config.NewConfig()
 	config := config.AppConfig
 

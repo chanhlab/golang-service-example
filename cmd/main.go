@@ -31,7 +31,7 @@ func main() {
 			{
 				Name: "worker",
 				Action: func(ctx *cli.Context) error {
-					return worker.RunWorker()
+					return worker.RunWorker(ctx.Context)
 				},
 			},
 		},

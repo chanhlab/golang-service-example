@@ -30,7 +30,7 @@ func NewCredentialRepository() CredentialRepository {
 }
 
 // GetCredentials returns a list of credentials
-func (db *CredentialDBMock) GetCredentials(offset int, limit int) ([]*models.Credential, error) {
+func (db *CredentialDBMock) GetCredentials(offset int, _ int) ([]*models.Credential, error) {
 	var err error
 
 	if offset > 100 {
