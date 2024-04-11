@@ -4,9 +4,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/bxcodec/faker/v4"
 	"github.com/chanhlab/golang-service-example/internal/models"
-
-	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"
 )
 
