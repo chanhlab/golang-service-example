@@ -10,6 +10,7 @@ import (
 	JobWorkers "github.com/digitalocean/go-workers2"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // CredentialWorker ...
@@ -41,7 +42,7 @@ func (worker *CredentialWorker) Execute(message *JobWorkers.Msg) error {
 
 	// ================== Example Worker calls GRPC service to create a new Credential ====================
 	grpcPort := os.Getenv("GRPC_PORT")
-	connection, err := grpc.Dial(fmt.Sprintf(":%s", grpcPort), grpc.WithInsecure(), grpc.WithBlock())
+	connection, err := grpc.Dial(fmt.Sprintf(":%s", grpcPort), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		JobWorkers.Logger.Fatalf("Did not connect: %v", err)
 	}

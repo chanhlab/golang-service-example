@@ -16,6 +16,11 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+)
+
+const (
+	CONTEXT_TIMEOUT = 5 * time.Second
 )
 
 // RunRestServer runs HTTP/REST gateway
@@ -30,7 +35,7 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 	logger.Log.Info(fmt.Sprintf("HTTP Port: %d", httpPort))
 
 	opts := []grpc.DialOption{
-		grpc.WithInsecure(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithUnaryInterceptor(
 			grpc_opentracing.UnaryClientInterceptor(
 				grpc_opentracing.WithTracer(opentracing.GlobalTracer()),
@@ -57,7 +62,7 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 			// sig is a ^C, handle it
 			logger.Log.Warn("shutting down gRPC server...")
 		}
-		_, cancel := context.WithTimeout(ctx, 5*time.Second)
+		_, cancel := context.WithTimeout(ctx, CONTEXT_TIMEOUT)
 		defer cancel()
 		_ = srv.Shutdown(ctx)
 	}()
