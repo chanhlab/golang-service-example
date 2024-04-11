@@ -4,6 +4,7 @@ go 1.22
 
 require (
 	github.com/bxcodec/faker/v3 v3.8.1
+	github.com/bxcodec/faker/v4 v4.0.0-beta.3
 	github.com/chanhlab/go-utils v1.0.6
 	github.com/digitalocean/go-workers2 v0.10.4
 	github.com/google/uuid v1.3.0
