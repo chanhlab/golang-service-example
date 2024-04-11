@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	CONTEXT_TIMEOUT = 5 * time.Second
+	ContextTimeout = 5 * time.Second
 )
 
 // RunRestServer runs HTTP/REST gateway
@@ -62,7 +62,7 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 			// sig is a ^C, handle it
 			logger.Log.Warn("shutting down gRPC server...")
 		}
-		_, cancel := context.WithTimeout(ctx, CONTEXT_TIMEOUT)
+		_, cancel := context.WithTimeout(ctx, ContextTimeout)
 		defer cancel()
 		_ = srv.Shutdown(ctx)
 	}()

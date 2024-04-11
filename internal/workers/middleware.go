@@ -14,7 +14,7 @@ func NewWorkerMiddleware() JobWorkers.Middlewares {
 }
 
 // Call is callback
-func (w *WorkerMiddleware) Call(_ string, mgr *JobWorkers.Manager, next JobWorkers.JobFunc) JobWorkers.JobFunc {
+func (w *WorkerMiddleware) Call(_ string, _ *JobWorkers.Manager, next JobWorkers.JobFunc) JobWorkers.JobFunc {
 	return func(message *JobWorkers.Msg) (err error) {
 		// do something before each message is processed
 		err = next(message)

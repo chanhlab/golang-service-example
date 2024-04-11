@@ -21,7 +21,7 @@ type CredentialRepository interface {
 }
 
 const (
-	MAX_OFFSET = 100
+	MaxOffset = 100
 )
 
 // CredentialDBMock structure
@@ -37,7 +37,7 @@ func NewCredentialRepository() CredentialRepository {
 func (db *CredentialDBMock) GetCredentials(offset int, _ int) ([]*models.Credential, error) {
 	var err error
 
-	if offset > MAX_OFFSET {
+	if offset > MaxOffset {
 		return nil, errors.New("can not query database")
 	}
 
