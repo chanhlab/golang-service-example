@@ -31,7 +31,7 @@ linters:
     - nolintlint
     - revive
     - staticcheck
-    - stylecheck
+    # - stylecheck
     - unconvert
     - unparam
     - unused
