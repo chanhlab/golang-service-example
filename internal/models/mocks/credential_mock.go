@@ -4,9 +4,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/bxcodec/faker/v4"
 	"github.com/chanhlab/golang-service-example/internal/models"
-
-	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"
 )
 
@@ -21,6 +20,10 @@ type CredentialRepository interface {
 	Delete(*models.Credential) error
 }
 
+const (
+	MaxOffset = 100
+)
+
 // CredentialDBMock structure
 type CredentialDBMock struct {
 }
@@ -31,11 +34,11 @@ func NewCredentialRepository() CredentialRepository {
 }
 
 // GetCredentials returns a list of credentials
-func (db *CredentialDBMock) GetCredentials(offset int, limit int) ([]*models.Credential, error) {
+func (db *CredentialDBMock) GetCredentials(offset int, _ int) ([]*models.Credential, error) {
 	var err error
 
-	if offset > 100 {
-		return nil, errors.New("Can not query database")
+	if offset > MaxOffset {
+		return nil, errors.New("can not query database")
 	}
 
 	credentials := []*models.Credential{}
@@ -54,7 +57,7 @@ func (db *CredentialDBMock) GetCredentials(offset int, limit int) ([]*models.Cre
 func (db *CredentialDBMock) GetCredential(id string) (*models.Credential, error) {
 	var err error
 	if id == "" {
-		return nil, errors.New("ID can not be empty")
+		return nil, errors.New("id can not be empty")
 	}
 	credential := &models.Credential{
 		ID:        id,
@@ -70,7 +73,7 @@ func (db *CredentialDBMock) GetCredential(id string) (*models.Credential, error)
 func (db *CredentialDBMock) Create(credential *models.Credential) error {
 	var err error
 	if credential.Key == "" {
-		return errors.New("Name can not be empty")
+		return errors.New("name can not be empty")
 	}
 	err = credential.BeforeCreate()
 	credential.CreatedAt = time.Now()
@@ -82,7 +85,7 @@ func (db *CredentialDBMock) Create(credential *models.Credential) error {
 func (db *CredentialDBMock) Update(credential *models.Credential) error {
 	var err error
 	if credential.ID == "" {
-		return errors.New("ID can not be empty")
+		return errors.New("id can not be empty")
 	}
 	credential.UpdatedAt = time.Now()
 	return err
@@ -92,7 +95,7 @@ func (db *CredentialDBMock) Update(credential *models.Credential) error {
 func (db *CredentialDBMock) Activate(credential *models.Credential) error {
 	var err error
 	if credential.ID == "empty" {
-		return errors.New("ID can not be empty")
+		return errors.New("id can not be empty")
 	}
 	credential.Status = models.CredentialActive
 	return err
@@ -102,7 +105,7 @@ func (db *CredentialDBMock) Activate(credential *models.Credential) error {
 func (db *CredentialDBMock) Deactivate(credential *models.Credential) error {
 	var err error
 	if credential.ID == "empty" {
-		return errors.New("ID can not be empty")
+		return errors.New("id can not be empty")
 	}
 	credential.Status = models.CredentialInactive
 	return err
@@ -112,7 +115,7 @@ func (db *CredentialDBMock) Deactivate(credential *models.Credential) error {
 func (db *CredentialDBMock) Delete(credential *models.Credential) error {
 	var err error
 	if credential.ID == "" {
-		return errors.New("ID can not be empty")
+		return errors.New("id can not be empty")
 	}
 	return err
 }

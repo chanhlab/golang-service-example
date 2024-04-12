@@ -10,13 +10,18 @@ import (
 
 	"github.com/chanhlab/go-utils/logger"
 	"github.com/chanhlab/go-utils/rest/middleware"
-	credentail_pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
-
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/opentracing/opentracing-go"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+)
+
+const (
+	ContextTimeout    = 5 * time.Second
+	ReadHeaderTimeout = 30 * time.Second
 )
 
 // RunRestServer runs HTTP/REST gateway
@@ -24,14 +29,14 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	mux := runtime.NewServeMux(
-		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{OrigName: true, EmitDefaults: true}),
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{}),
 		runtime.WithIncomingHeaderMatcher(CustomHeaderMatcher),
 	)
 
 	logger.Log.Info(fmt.Sprintf("HTTP Port: %d", httpPort))
 
 	opts := []grpc.DialOption{
-		grpc.WithInsecure(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithUnaryInterceptor(
 			grpc_opentracing.UnaryClientInterceptor(
 				grpc_opentracing.WithTracer(opentracing.GlobalTracer()),
@@ -39,13 +44,14 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 		),
 	}
 
-	err := credentail_pb.RegisterCredentialServiceHandlerFromEndpoint(ctx, mux, fmt.Sprintf(":%d", grpcPort), opts)
+	err := credentialv1.RegisterCredentialServiceHandlerFromEndpoint(ctx, mux, fmt.Sprintf(":%d", grpcPort), opts)
 	if err != nil {
 		logger.Log.Fatal("failed to start HTTP gateway", zap.String("reason", err.Error()))
 	}
 
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%d", httpPort),
+		Addr:              fmt.Sprintf(":%d", httpPort),
+		ReadHeaderTimeout: ReadHeaderTimeout,
 		// add handler with middleware
 		Handler: middleware.TracingWrapper(middleware.RequestID(middleware.AddLogger(logger.Log, mux))),
 	}
@@ -58,7 +64,7 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 			// sig is a ^C, handle it
 			logger.Log.Warn("shutting down gRPC server...")
 		}
-		_, cancel := context.WithTimeout(ctx, 5*time.Second)
+		_, cancel := context.WithTimeout(ctx, ContextTimeout)
 		defer cancel()
 		_ = srv.Shutdown(ctx)
 	}()

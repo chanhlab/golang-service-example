@@ -4,10 +4,9 @@ import (
 	"context"
 	"testing"
 
+	"github.com/bxcodec/faker/v4"
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	"github.com/chanhlab/golang-service-example/internal/models/mocks"
-	pb "github.com/chanhlab/golang-service-example/protobuf/v1/credential"
-
-	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
 )
@@ -34,7 +33,7 @@ func (c *CredentialServiceTestSuite) TestListCredentialsNormalCase() {
 	defer cancel()
 
 	// Normal case
-	request := &pb.ListCredentialRequest{
+	request := &credentialv1.ListRequest{
 		Offset: 0,
 		Limit:  10,
 	}
@@ -48,7 +47,7 @@ func (c *CredentialServiceTestSuite) TestListCredentialsLimitIsZero() {
 	defer cancel()
 
 	// Limit is zero
-	request := &pb.ListCredentialRequest{
+	request := &credentialv1.ListRequest{
 		Offset: 0,
 		Limit:  0,
 	}
@@ -62,7 +61,7 @@ func (c *CredentialServiceTestSuite) TestListCredentialsShouldReturnError() {
 	defer cancel()
 
 	// Should return an error
-	request := &pb.ListCredentialRequest{
+	request := &credentialv1.ListRequest{
 		Offset: 101,
 		Limit:  10,
 	}
@@ -77,7 +76,7 @@ func (c *CredentialServiceTestSuite) TestGetShouldReturnSingleRecord() {
 	defer cancel()
 
 	// Normal Case
-	request := &pb.GetCredentialRequest{
+	request := &credentialv1.GetRequest{
 		Id: uuid.New().String(),
 	}
 	_, err := c.CredentialService.Get(ctx, request)
@@ -90,7 +89,7 @@ func (c *CredentialServiceTestSuite) TestGetShouldInvalidID() {
 	defer cancel()
 
 	// Normal Case
-	request := &pb.GetCredentialRequest{
+	request := &credentialv1.GetRequest{
 		Id: "",
 	}
 	_, err := c.CredentialService.Get(ctx, request)
@@ -102,7 +101,7 @@ func (c *CredentialServiceTestSuite) TestCreateCredential() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.CreateCredentialRequest{
+	request := &credentialv1.CreateRequest{
 		Key:   faker.Name(),
 		Value: faker.Name(),
 	}
@@ -117,7 +116,7 @@ func (c *CredentialServiceTestSuite) TestCreateCredentailShouldReturnError() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.CreateCredentialRequest{
+	request := &credentialv1.CreateRequest{
 		Key:   "",
 		Value: "",
 	}
@@ -132,7 +131,7 @@ func (c *CredentialServiceTestSuite) TestUpdateCredential() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.UpdateCredentialRequest{
+	request := &credentialv1.UpdateRequest{
 		Id:    uuid.New().String(),
 		Value: faker.Name(),
 	}
@@ -147,7 +146,7 @@ func (c *CredentialServiceTestSuite) TestUpdateCredentialShouldReturnError() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.UpdateCredentialRequest{
+	request := &credentialv1.UpdateRequest{
 		Id:    "",
 		Value: faker.Name(),
 	}
@@ -162,7 +161,7 @@ func (c *CredentialServiceTestSuite) TestActivateCredential() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.GetCredentialRequest{
+	request := &credentialv1.ActivateRequest{
 		Id: uuid.New().String(),
 	}
 
@@ -176,7 +175,7 @@ func (c *CredentialServiceTestSuite) TestActivateCredentialShouldReturnError() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.GetCredentialRequest{
+	request := &credentialv1.ActivateRequest{
 		Id: "",
 	}
 
@@ -184,7 +183,7 @@ func (c *CredentialServiceTestSuite) TestActivateCredentialShouldReturnError() {
 	c.Assert().NotNil(err)
 	c.Assert().Nil(credential)
 
-	request = &pb.GetCredentialRequest{
+	request = &credentialv1.ActivateRequest{
 		Id: "empty",
 	}
 
@@ -198,7 +197,7 @@ func (c *CredentialServiceTestSuite) TestDeactivateCredential() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.GetCredentialRequest{
+	request := &credentialv1.DeactivateRequest{
 		Id: uuid.New().String(),
 	}
 
@@ -212,7 +211,7 @@ func (c *CredentialServiceTestSuite) TestDeactivateCredentialShouldReturnError()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.GetCredentialRequest{
+	request := &credentialv1.DeactivateRequest{
 		Id: "",
 	}
 
@@ -220,7 +219,7 @@ func (c *CredentialServiceTestSuite) TestDeactivateCredentialShouldReturnError()
 	c.Assert().NotNil(err)
 	c.Assert().Nil(credential)
 
-	request = &pb.GetCredentialRequest{
+	request = &credentialv1.DeactivateRequest{
 		Id: "empty",
 	}
 
@@ -234,7 +233,7 @@ func (c *CredentialServiceTestSuite) TestDeleteCredential() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.DeleteCredentialRequest{
+	request := &credentialv1.DeleteRequest{
 		Id: uuid.New().String(),
 	}
 
@@ -248,7 +247,7 @@ func (c *CredentialServiceTestSuite) TestDeleteCredentialShouldReturnError() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	request := &pb.DeleteCredentialRequest{
+	request := &credentialv1.DeleteRequest{
 		Id: "",
 	}
 
