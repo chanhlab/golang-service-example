@@ -20,7 +20,8 @@ import (
 )
 
 const (
-	ContextTimeout = 5 * time.Second
+	ContextTimeout    = 5 * time.Second
+	ReadHeaderTimeout = 30 * time.Second
 )
 
 // RunRestServer runs HTTP/REST gateway
@@ -49,7 +50,8 @@ func RunRestServer(ctx context.Context, grpcPort int, httpPort int) error {
 	}
 
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%d", httpPort),
+		Addr:              fmt.Sprintf(":%d", httpPort),
+		ReadHeaderTimeout: ReadHeaderTimeout,
 		// add handler with middleware
 		Handler: middleware.TracingWrapper(middleware.RequestID(middleware.AddLogger(logger.Log, mux))),
 	}
