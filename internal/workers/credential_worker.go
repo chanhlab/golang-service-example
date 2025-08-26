@@ -8,12 +8,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/chanhlab/golang-service-example/config"
-	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	"github.com/chanhlab/golang-service-example/config"
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 )
 
 // CredentialWorker handles credential processing tasks
@@ -49,18 +50,22 @@ func (w *CredentialWorker) ProcessTask(ctx context.Context, t *asynq.Task) error
 	if grpcPort == "" {
 		grpcPort = fmt.Sprintf("%d", w.config.Server.GRPCPort)
 	}
-	
-	connection, err := grpc.Dial(fmt.Sprintf(":%s", grpcPort), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+
+	connection, err := grpc.NewClient(fmt.Sprintf(":%s", grpcPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return fmt.Errorf("failed to connect to gRPC server: %w", err)
 	}
-	defer connection.Close()
-	
+	defer func() {
+		if closeErr := connection.Close(); closeErr != nil {
+			log.Printf("Warning: failed to close gRPC connection: %v", closeErr)
+		}
+	}()
+
 	client := credentialv1.NewCredentialServiceClient(connection)
 
 	ctx, cancel := context.WithTimeout(ctx, time.Second*30)
 	defer cancel()
-	
+
 	key := payload.Key
 	value := payload.Value
 	if key == "" {
@@ -69,7 +74,7 @@ func (w *CredentialWorker) ProcessTask(ctx context.Context, t *asynq.Task) error
 	if value == "" {
 		value = uuid.New().String()
 	}
-	
+
 	credential, err := client.Create(ctx, &credentialv1.CreateRequest{
 		Key:   key,
 		Value: value,
@@ -77,7 +82,7 @@ func (w *CredentialWorker) ProcessTask(ctx context.Context, t *asynq.Task) error
 	if err != nil {
 		return fmt.Errorf("failed to create credential: %w", err)
 	}
-	
+
 	log.Printf("Credential created - Id: %s, Key: %s, Value: %s",
 		credential.Credential.GetId(),
 		credential.Credential.GetKey(),

@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/hibiken/asynq"
+
 	"github.com/chanhlab/golang-service-example/config"
 	"github.com/chanhlab/golang-service-example/internal/workers"
-	"github.com/hibiken/asynq"
 )
 
 // RunWorker starts the worker server
@@ -34,13 +35,13 @@ func RunWorker(ctx context.Context) error {
 
 	// Create mux and register handlers
 	mux := asynq.NewServeMux()
-	
+
 	// Register credential worker handler
 	credentialWorker := workers.NewCredentialWorker()
 	mux.HandleFunc("credential:process", credentialWorker.ProcessTask)
 
 	log.Println("Starting worker server...")
-	
+
 	// Start the server and blocks until receiving termination signal
 	return srv.Run(mux)
 }

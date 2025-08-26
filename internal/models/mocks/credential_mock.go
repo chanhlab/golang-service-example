@@ -5,8 +5,9 @@ import (
 	"time"
 
 	"github.com/bxcodec/faker/v4"
-	"github.com/chanhlab/golang-service-example/internal/models"
 	"github.com/google/uuid"
+
+	"github.com/chanhlab/golang-service-example/internal/models"
 )
 
 // CredentialRepository interface
@@ -25,8 +26,7 @@ const (
 )
 
 // CredentialDBMock structure
-type CredentialDBMock struct {
-}
+type CredentialDBMock struct{}
 
 // NewCredentialRepository creates a new CredentialRepository
 func NewCredentialRepository() CredentialRepository {

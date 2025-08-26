@@ -25,14 +25,14 @@ type Server struct {
 
 // Database holds database configuration
 type Database struct {
-	Host              string `mapstructure:"host"`
-	Port              int    `mapstructure:"port"`
-	DBName            string `mapstructure:"db_name"`
-	Username          string `mapstructure:"username"`
-	Password          string `mapstructure:"password"`
-	MaxOpenConns      int    `mapstructure:"max_open_conns"`
-	MaxIdleConns      int    `mapstructure:"max_idle_conns"`
-	ConnMaxLifetime   int    `mapstructure:"conn_max_lifetime"`
+	Host            string `mapstructure:"host"`
+	Port            int    `mapstructure:"port"`
+	DBName          string `mapstructure:"db_name"`
+	Username        string `mapstructure:"username"`
+	Password        string `mapstructure:"password"`
+	MaxOpenConns    int    `mapstructure:"max_open_conns"`
+	MaxIdleConns    int    `mapstructure:"max_idle_conns"`
+	ConnMaxLifetime int    `mapstructure:"conn_max_lifetime"`
 }
 
 // Redis holds Redis configuration

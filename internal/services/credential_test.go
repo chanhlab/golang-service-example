@@ -5,10 +5,11 @@ import (
 	"testing"
 
 	"github.com/bxcodec/faker/v4"
-	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
-	"github.com/chanhlab/golang-service-example/internal/models/mocks"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
+
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
+	"github.com/chanhlab/golang-service-example/internal/models/mocks"
 )
 
 type CredentialServiceTestSuite struct {

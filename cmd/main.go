@@ -4,10 +4,11 @@ import (
 	"log"
 	"os"
 
+	"github.com/urfave/cli/v2"
+
 	"github.com/chanhlab/golang-service-example/cmd/api"
 	"github.com/chanhlab/golang-service-example/cmd/migration"
 	"github.com/chanhlab/golang-service-example/cmd/worker"
-	"github.com/urfave/cli/v2"
 )
 
 func main() {

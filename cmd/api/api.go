@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/chanhlab/go-kit/logger"
+
 	"github.com/chanhlab/golang-service-example/config"
 	"github.com/chanhlab/golang-service-example/internal/grpc"
 	"github.com/chanhlab/golang-service-example/internal/rest"

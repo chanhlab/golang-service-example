@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/chanhlab/go-kit/timestamp"
+
 	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	"github.com/chanhlab/golang-service-example/internal/models"
 )
@@ -32,9 +33,8 @@ func (s *CredentialService) List(_ context.Context, request *credentialv1.ListRe
 	var err error
 
 	credentials, err = s.CredentialRepository.GetCredentials(offset, limit)
-
 	if err != nil {
-		return nil, fmt.Errorf("Can not get Credentials: %+v", err)
+		return nil, fmt.Errorf("cannot get credentials: %+v", err)
 	}
 	pbCredentials := []*credentialv1.Credential{}
 	for _, credential := range credentials {
@@ -49,7 +49,7 @@ func (s *CredentialService) Get(_ context.Context, request *credentialv1.GetRequ
 	var credential *models.Credential
 	credential, err := s.CredentialRepository.GetCredential(id)
 	if err != nil {
-		return nil, fmt.Errorf("Credential not found with ID %s, Error: %+v", id, err)
+		return nil, fmt.Errorf("credential not found with ID %s: %+v", id, err)
 	}
 	return &credentialv1.GetResponse{Credential: s.CredentialToProto(credential)}, nil
 }
@@ -62,7 +62,7 @@ func (s *CredentialService) Create(_ context.Context, request *credentialv1.Crea
 	credential := &models.Credential{Key: key, Value: value}
 	err := s.CredentialRepository.Create(credential)
 	if err != nil {
-		return nil, fmt.Errorf("Can not create Credential: %+v", err)
+		return nil, fmt.Errorf("cannot create credential: %+v", err)
 	}
 	credential, _ = s.CredentialRepository.GetCredential(credential.ID)
 	return &credentialv1.CreateResponse{Credential: s.CredentialToProto(credential)}, nil
@@ -75,13 +75,13 @@ func (s *CredentialService) Update(_ context.Context, request *credentialv1.Upda
 
 	credential, err := s.CredentialRepository.GetCredential(id)
 	if err != nil {
-		return nil, fmt.Errorf("Credential not found with ID %s", id)
+		return nil, fmt.Errorf("credential not found with ID %s", id)
 	}
 
 	credential.Value = value
 	err = s.CredentialRepository.Update(credential)
 	if err != nil {
-		return nil, fmt.Errorf("Can not update Credential with ID %s, Errors: %v", id, err)
+		return nil, fmt.Errorf("cannot update credential with ID %s: %v", id, err)
 	}
 
 	credential, _ = s.CredentialRepository.GetCredential(credential.ID)
@@ -93,14 +93,13 @@ func (s *CredentialService) Activate(_ context.Context, request *credentialv1.Ac
 	id := request.GetId()
 
 	credential, err := s.CredentialRepository.GetCredential(id)
-
 	if err != nil {
-		return nil, fmt.Errorf("Credential not found with ID %s", id)
+		return nil, fmt.Errorf("credential not found with ID %s", id)
 	}
 
 	err = s.CredentialRepository.Activate(credential)
 	if err != nil {
-		return nil, fmt.Errorf("Can not Activate Credential with ID %s, %+v", id, err)
+		return nil, fmt.Errorf("cannot activate credential with ID %s: %+v", id, err)
 	}
 
 	return &credentialv1.ActivateResponse{Credential: s.CredentialToProto(credential)}, nil
@@ -111,14 +110,13 @@ func (s *CredentialService) Deactivate(_ context.Context, request *credentialv1.
 	id := request.GetId()
 
 	credential, err := s.CredentialRepository.GetCredential(id)
-
 	if err != nil {
-		return nil, fmt.Errorf("Credential not found with ID %s", id)
+		return nil, fmt.Errorf("credential not found with ID %s", id)
 	}
 
 	err = s.CredentialRepository.Deactivate(credential)
 	if err != nil {
-		return nil, fmt.Errorf("Can not Deactivate Credential with ID %s, %+v", id, err)
+		return nil, fmt.Errorf("cannot deactivate credential with ID %s: %+v", id, err)
 	}
 
 	return &credentialv1.DeactivateResponse{Credential: s.CredentialToProto(credential)}, nil
@@ -130,7 +128,7 @@ func (s *CredentialService) Delete(_ context.Context, request *credentialv1.Dele
 	credential := &models.Credential{ID: id}
 	err := s.CredentialRepository.Delete(credential)
 	if err != nil {
-		return nil, fmt.Errorf("Can not Remove Credential with ID %s, %+v", id, err)
+		return nil, fmt.Errorf("cannot remove credential with ID %s: %+v", id, err)
 	}
 	return &credentialv1.DeleteResponse{DeletedAt: timestamp.ProtoTimestampNow()}, nil
 }

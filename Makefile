@@ -12,6 +12,16 @@ lint:
 	@echo "## Run GolangCI Lint"
 	golangci-lint run ./...
 
+.PHONY: lint-fix
+lint-fix:
+	@echo "## Run GolangCI Lint with auto-fix"
+	golangci-lint run --fix ./...
+
+.PHONY: lint-verbose
+lint-verbose:
+	@echo "## Run GolangCI Lint with verbose output"
+	golangci-lint run -v ./...
+
 .PHONY: generate
 generate:
 	@echo "## Generate"

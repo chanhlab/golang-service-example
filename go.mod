@@ -1,6 +1,6 @@
 module github.com/chanhlab/golang-service-example
 
-go 1.23.0
+go 1.25.0
 
 require (
 	github.com/bxcodec/faker/v4 v4.0.0-beta.3

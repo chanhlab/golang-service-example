@@ -9,13 +9,14 @@ import (
 
 	"github.com/chanhlab/go-kit/grpc/middleware"
 	"github.com/chanhlab/go-kit/logger"
-	"github.com/chanhlab/golang-service-example/config"
-	"github.com/chanhlab/golang-service-example/internal/database"
-	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
-	"github.com/chanhlab/golang-service-example/internal/models"
-	"github.com/chanhlab/golang-service-example/internal/services"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+
+	"github.com/chanhlab/golang-service-example/config"
+	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
+	"github.com/chanhlab/golang-service-example/internal/database"
+	"github.com/chanhlab/golang-service-example/internal/models"
+	"github.com/chanhlab/golang-service-example/internal/services"
 )
 
 // RunGrpcServer ...
