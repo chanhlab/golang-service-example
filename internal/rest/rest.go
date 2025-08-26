@@ -8,8 +8,8 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/chanhlab/go-utils/logger"
-	"github.com/chanhlab/go-utils/rest/middleware"
+	"github.com/chanhlab/go-kit/logger"
+	"github.com/chanhlab/go-kit/rest/middleware"
 	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"

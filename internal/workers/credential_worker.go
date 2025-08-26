@@ -2,64 +2,83 @@ package workers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
+	"github.com/chanhlab/golang-service-example/config"
 	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
-	JobWorkers "github.com/digitalocean/go-workers2"
 	"github.com/google/uuid"
+	"github.com/hibiken/asynq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// CredentialWorker ...
+// CredentialWorker handles credential processing tasks
 type CredentialWorker struct {
-	Manager     *JobWorkers.Manager
-	queue       string
-	concurrency int
+	config *config.Config
 }
 
-// NewCredentialWorker create instance
-func NewCredentialWorker(manager *JobWorkers.Manager, queue string, concurrency int) *CredentialWorker {
+// TaskPayload represents the task payload structure
+type TaskPayload struct {
+	ID    int    `json:"id"`
+	Key   string `json:"key,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+
+// NewCredentialWorker creates a new credential worker instance
+func NewCredentialWorker() *CredentialWorker {
 	return &CredentialWorker{
-		Manager:     manager,
-		queue:       queue,
-		concurrency: concurrency,
+		config: config.AppConfig,
 	}
 }
 
-// Register is a registration worker
-func (worker *CredentialWorker) Register() {
-	workerMiddleware := NewWorkerMiddleware()
-	worker.Manager.AddWorker(worker.queue, worker.concurrency, worker.Execute, workerMiddleware...)
-}
+// ProcessTask processes a credential task
+func (w *CredentialWorker) ProcessTask(ctx context.Context, t *asynq.Task) error {
+	var payload TaskPayload
+	if err := json.Unmarshal(t.Payload(), &payload); err != nil {
+		return fmt.Errorf("failed to unmarshal task payload: %w", err)
+	}
 
-// Execute is a execution job of worker
-func (worker *CredentialWorker) Execute(message *JobWorkers.Msg) error {
-	fmt.Printf("\nJob ID: %s", message.Jid())
-	fmt.Printf("\nID: %v\n", message.Args().Interface())
+	log.Printf("Processing credential task: ID=%d", payload.ID)
 
 	// ================== Example Worker calls GRPC service to create a new Credential ====================
 	grpcPort := os.Getenv("GRPC_PORT")
+	if grpcPort == "" {
+		grpcPort = fmt.Sprintf("%d", w.config.Server.GRPCPort)
+	}
+	
 	connection, err := grpc.Dial(fmt.Sprintf(":%s", grpcPort), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
-		JobWorkers.Logger.Fatalf("Did not connect: %v", err)
+		return fmt.Errorf("failed to connect to gRPC server: %w", err)
 	}
 	defer connection.Close()
+	
 	client := credentialv1.NewCredentialServiceClient(connection)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*30)
 	defer cancel()
+	
+	key := payload.Key
+	value := payload.Value
+	if key == "" {
+		key = uuid.New().String()
+	}
+	if value == "" {
+		value = uuid.New().String()
+	}
+	
 	credential, err := client.Create(ctx, &credentialv1.CreateRequest{
-		Key:   uuid.New().String(),
-		Value: uuid.New().String(),
+		Key:   key,
+		Value: value,
 	})
 	if err != nil {
-		JobWorkers.Logger.Fatalf("Can not create Credential: %v", err)
+		return fmt.Errorf("failed to create credential: %w", err)
 	}
-	JobWorkers.Logger.Printf(
-		"Id: %s === Key: %s === Value: %s",
+	
+	log.Printf("Credential created - Id: %s, Key: %s, Value: %s",
 		credential.Credential.GetId(),
 		credential.Credential.GetKey(),
 		credential.Credential.GetValue(),

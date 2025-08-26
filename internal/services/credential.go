@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/chanhlab/go-utils/timestamp"
+	"github.com/chanhlab/go-kit/timestamp"
 	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	"github.com/chanhlab/golang-service-example/internal/models"
 )

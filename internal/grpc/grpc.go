@@ -7,10 +7,10 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/chanhlab/go-utils/database/mysql"
-	"github.com/chanhlab/go-utils/grpc/middleware"
-	"github.com/chanhlab/go-utils/logger"
+	"github.com/chanhlab/go-kit/grpc/middleware"
+	"github.com/chanhlab/go-kit/logger"
 	"github.com/chanhlab/golang-service-example/config"
+	"github.com/chanhlab/golang-service-example/internal/database"
 	credentialv1 "github.com/chanhlab/golang-service-example/generated/go/credential/v1"
 	"github.com/chanhlab/golang-service-example/internal/models"
 	"github.com/chanhlab/golang-service-example/internal/services"
@@ -36,14 +36,14 @@ func RunGrpcServer(ctx context.Context, appConfig *config.Config) error {
 	// register server
 	server := grpc.NewServer(options...)
 
-	db := mysql.GetConnection(
-		appConfig.MySQL.Host,
-		config.AppConfig.MySQL.Port,
-		appConfig.MySQL.DBName,
-		appConfig.MySQL.Username,
-		appConfig.MySQL.Password,
-		appConfig.MySQL.MaxIDLEConnection,
-		appConfig.MySQL.MaxOpenConnection)
+	db := database.GetConnection(
+		appConfig.Database.Host,
+		appConfig.Database.Port,
+		appConfig.Database.DBName,
+		appConfig.Database.Username,
+		appConfig.Database.Password,
+		appConfig.Database.MaxOpenConns,
+		appConfig.Database.MaxIdleConns)
 	credentialRepository := models.NewCredentialRepository(db)
 	credentialService := services.NewCredentialService(credentialRepository)
 

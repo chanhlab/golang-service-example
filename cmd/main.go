@@ -23,7 +23,32 @@ func main() {
 				},
 			},
 			{
-				Name: "migration",
+				Name:  "migration",
+				Usage: "database migration commands",
+				Subcommands: []*cli.Command{
+					{
+						Name:  "up",
+						Usage: "run all pending migrations",
+						Action: func(ctx *cli.Context) error {
+							return migration.RunMigration(ctx.Context)
+						},
+					},
+					{
+						Name:  "down",
+						Usage: "rollback the last migration",
+						Action: func(ctx *cli.Context) error {
+							return migration.RunMigrationDown(ctx.Context)
+						},
+					},
+					{
+						Name:  "version",
+						Usage: "show current migration version",
+						Action: func(ctx *cli.Context) error {
+							return migration.GetMigrationVersion(ctx.Context)
+						},
+					},
+				},
+				// Default action (for backward compatibility)
 				Action: func(ctx *cli.Context) error {
 					return migration.RunMigration(ctx.Context)
 				},

@@ -3,49 +3,44 @@ package worker
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/chanhlab/golang-service-example/config"
 	"github.com/chanhlab/golang-service-example/internal/workers"
-	JobWorkers "github.com/digitalocean/go-workers2"
+	"github.com/hibiken/asynq"
 )
 
-// main ...
-func RunWorker(_ context.Context) error {
+// RunWorker starts the worker server
+func RunWorker(ctx context.Context) error {
 	config.NewConfig()
-	config := config.AppConfig
+	cfg := config.AppConfig
 
-	workerPool := 10
-
-	manager, err := JobWorkers.NewManager(JobWorkers.Options{
-		// location of redis instance
-		ServerAddr: fmt.Sprintf("%s:%d", config.Redis.Host, config.Redis.Port),
-		// instance of the database
-		Database: config.Redis.Database,
-		// number of connections to keep open with redis
-		PoolSize: workerPool,
-		// unique process id for this instance of workers (for proper recovery of inprogress jobs on crash)
-		ProcessID: "1",
-	})
-
-	if err != nil {
-		JobWorkers.Logger.Fatal(err)
+	// Create Redis connection config for asynq
+	redisConnOpt := asynq.RedisClientOpt{
+		Addr:     fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port),
+		Password: cfg.Redis.Password,
+		DB:       cfg.Redis.DB,
 	}
 
-	// Register Credential Worker
-	workers.NewCredentialWorker(manager, "credential", workerPool).Register()
+	// Create asynq server
+	srv := asynq.NewServer(redisConnOpt, asynq.Config{
+		Concurrency: 10,
+		Queues: map[string]int{
+			"default": 6,
+			"low":     3,
+			"high":    1,
+		},
+	})
 
-	// producer := manager.Producer()
-	// Add a job to a queue
-	// i := 0
-	// for i < 10000 {
-	// 	producer.Enqueue("credential", "CredentialWorker", []int{i})
-	// 	i++
-	// }
+	// Create mux and register handlers
+	mux := asynq.NewServeMux()
+	
+	// Register credential worker handler
+	credentialWorker := workers.NewCredentialWorker()
+	mux.HandleFunc("credential:process", credentialWorker.ProcessTask)
 
-	// stats will be available at http://localhost:8080/stats
-	// go JobWorkers.StatsServer(8080)
-
-	// Blocks until process is told to exit via unix signal
-	manager.Run()
-	return nil
+	log.Println("Starting worker server...")
+	
+	// Start the server and blocks until receiving termination signal
+	return srv.Run(mux)
 }
